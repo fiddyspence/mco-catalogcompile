@@ -3,7 +3,7 @@ metadata    :name        => "Puppet catalog agent",
             :author      => "fiddyspence",
             :license     => "ASL2",
             :version     => "1.0",
-            :url         => "https://github.com/fiddyspence/mco_catalog",
+            :url         => "https://github.com/fiddyspence/mco-catalogcompile",
             :timeout     => 180
 
   action compile, :description => "compile a catalog" do

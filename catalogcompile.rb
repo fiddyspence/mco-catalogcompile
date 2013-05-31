@@ -9,7 +9,7 @@ module MCollective
                :author      => "fiddyspence",
                :license     => "ASL2",
                :version     => "1.0",
-               :url         => "http://github.com/fiddyspence/mco_catalog",
+               :url         => "https://github.com/fiddyspence/mco-catalogcompile",
                :timeout     => 180
 
       action "compile" do

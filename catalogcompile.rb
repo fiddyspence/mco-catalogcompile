@@ -15,11 +15,11 @@ module MCollective
       action "compile" do
         validate :server, String
 
-        facts=Puppet::Face[:facts, :current].find(request[:server])
-        node=Puppet::Node.new(request[:server])
+        facts=::Puppet::Face[:facts, :current].find(request[:server])
+        node=::Puppet::Node.new(request[:server])
         node.merge(facts.values)
         t = Time.now.to_f
-        catalog=Puppet::Resource::Catalog.indirection.find(request[:server], :node => node)
+        catalog=::Puppet::Resource::Catalog.indirection.find(request[:server], :node => node)
         u = Time.now.to_f
         reply[:catalog] = catalog.to_pson
         reply[:time] = u-t

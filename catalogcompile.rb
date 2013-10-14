@@ -16,7 +16,9 @@ module MCollective
         require 'puppet/util/run_mode'
 
         ::Puppet.settings.preferred_run_mode = :master
-        ::Puppet.settings.initialize_app_defaults(::Puppet::Settings.app_defaults_for_run_mode(::Puppet.run_mode))
+        unless ::Puppet.settings.app_defaults_initialized?
+          ::Puppet.settings.initialize_app_defaults(::Puppet::Settings.app_defaults_for_run_mode(::Puppet.run_mode))
+        end
         facts=::Puppet::Node::Facts.indirection.find(request[:server])
         node=::Puppet::Node.new(request[:server])
         node.merge(facts.values)

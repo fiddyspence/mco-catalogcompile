@@ -32,8 +32,8 @@ module MCollective
       end
 
       payload=Puppet::Node::Facts.new(configuration[:server],@facts)
-
-      foo = `curl -o wtf.file --cert #{@config.pluginconf['putfacts.cert']} --key #{@config.pluginconf['putfacts.key']} --cacert #{@config.pluginconf['putfacts.cacert']} -k -X PUT -H 'Content-Type: text/yaml' --data-binary '#{payload.to_yaml}' https://#{@config.pluginconf['putfacts.server']}:8140/production/facts/#{configuration[:server]}`
+      File.open('/tmp/putfacts.curl','w') {|f| f.write "curl -s -o wtf.file --cert #{@config.pluginconf['putfacts.cert']} --key #{@config.pluginconf['putfacts.key']} --cacert #{@config.pluginconf['putfacts.cacert']} -k -X PUT -H 'Content-Type: text/yaml' --data-binary '#{payload.to_yaml}' https://#{@config.pluginconf['putfacts.server']}:8140/production/facts/#{configuration[:server]}" }
+      foo = `curl -s -o wtf.file --cert #{@config.pluginconf['putfacts.cert']} --key #{@config.pluginconf['putfacts.key']} --cacert #{@config.pluginconf['putfacts.cacert']} -k -X PUT -H 'Content-Type: text/yaml' --data-binary '#{payload.to_yaml}' https://#{@config.pluginconf['putfacts.server']}:8140/production/facts/#{configuration[:server]}`
 
     end
   end

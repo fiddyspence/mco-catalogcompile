@@ -33,7 +33,7 @@ module MCollective
       applyer = rpcclient("catalogapply")
       applyer.identity_filter configuration[:server]
       applyer_result = applyer.apply(:catalog => @catalog)
-      puts applyer_result.inspect
+#      puts applyer_result.inspect
 
     end
   end

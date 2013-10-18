@@ -17,14 +17,16 @@ module MCollective
     end
 
     def main
+      @config = Config.instance
       catalog = rpcclient("catalogcompile")
 
-      catalog.identity_filter configuration[:server]
+      catalog.identity_filter @config.pluginconf['putfacts.server']
       catalog_result = catalog.compile(:server => configuration[:server])
 
       catalog_result.each do |result|
         @catalog = result[:data][:catalog]
       end
+
       File.open('/tmp/catalog','w') { |f| f.write @catalog }
       puts 'right you fucks'
 

@@ -17,12 +17,7 @@ module MCollective
     end
 
     def main
-#      require 'rubygems'
-#      require 'json'
-#      require 'puppet/network/http_pool'
-#      require 'uri'
-#      require 'puppet/util/puppetdb/char_encoding'
-#      require 'digest'
+      @config = Config.instance
       require 'yaml'
       require 'puppet'
       require 'puppet/node'
@@ -33,12 +28,12 @@ module MCollective
       pkg_result = pkg.send('getfacts')
 
       pkg_result.each do |result|
-       @facts = result[:data][:facts]
+        @facts = result[:data][:facts]
       end
 
       payload=Puppet::Node::Facts.new(configuration[:server],@facts)
 
-      foo = `curl -o wtf.file --cert /etc/puppetlabs/puppet/ssl/certs/pe31.spence.org.uk.local.pem --key /etc/puppetlabs/puppet/ssl/private_keys/pe31.spence.org.uk.local.pem --cacert /etc/puppetlabs/puppet/ssl/ca/ca_crt.pem -k -X PUT -H 'Content-Type: text/yaml' --data-binary '#{payload.to_yaml}' https://pe31.spence.org.uk.local:8140/production/facts/pe31.spence.org.uk.local`
+      foo = `curl -o wtf.file --cert #{@config.pluginconf['putfacts.cert']} --key #{@config.pluginconf['putfacts.key']} --cacert #{@config.pluginconf['putfacts.cacert']} -k -X PUT -H 'Content-Type: text/yaml' --data-binary '#{payload.to_yaml}' https://#{@config.pluginconf['putfacts.server']}:8140/production/facts/#{configuration[:server]}`
 
     end
   end

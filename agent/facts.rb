@@ -12,6 +12,7 @@ module MCollective
         unless $LOAD_PATH.include?(::Puppet[:libdir])
           $LOAD_PATH << ::Puppet[:libdir]
         end
+        ::Facter.clear
         reply[:facts] = ::Facter.to_hash
       end
 

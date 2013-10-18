@@ -1,33 +1,21 @@
 module MCollective
   module Agent
     class Catalogcompile<RPC::Agent
-      metadata :name        => "Puppet catalog agent",
-               :description => "Ask a puppetmaster to compile a catalog via mcollective",
-               :author      => "fiddyspence",
-               :license     => "ASL2",
-               :version     => "1.0",
-               :url         => "https://github.com/fiddyspence/mco-catalogcompile",
-               :timeout     => 180
 
       action "compile" do
+        @config = Config.instance
+
         validate :server, String
-        require 'puppet'
-        require 'puppet/face'
-        require 'puppet/util/run_mode'
 
-        ::Puppet.settings.preferred_run_mode = :master
-        unless ::Puppet.settings.app_defaults_initialized?
-          ::Puppet.settings.initialize_app_defaults(::Puppet::Settings.app_defaults_for_run_mode(::Puppet.run_mode))
-        end
-        facts=::Puppet::Node::Facts.indirection.find(request[:server])
-        node=::Puppet::Node.new(request[:server])
-        node.merge(facts.values)
-        t = Time.now.to_f
-        catalog=::Puppet::Resource::Catalog.indirection.find(request[:server], :node => node)
-        u = Time.now.to_f
-        reply[:catalog] = catalog.to_pson
-        reply[:time] = u-t
+        result = {:exitcode => nil,
+                  :output => "",
+        }
 
+        cmd = Shell.new("/usr/bin/curl -s --cert #{@config.pluginconf['putfacts.cert']} --key #{@config.pluginconf['putfacts.key']} --cacert #{@config.pluginconf['putfacts.cacert']} -H 'Accept: pson' https://#{@config.pluginconf['putfacts.server']}:8140/production/catalog/#{request[:server]}", :stdout => result[:output], :stderr => result[:output])
+
+       cmd.runcommand
+
+       reply[:catalog] = result[:output]
       end
 
     end

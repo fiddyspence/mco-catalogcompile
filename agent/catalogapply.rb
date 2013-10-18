@@ -7,13 +7,13 @@ module MCollective
 result = {:exitcode => nil,
                  :output => "",
        }
-       File.open('/tmp/foocatalog','w') { |f| f.write request[:catalog] }
+       File.open('/tmp/foocatalog','w') { |f| f.write request[:catalog] ; f.flush }
        cmd = Shell.new("/opt/puppet/bin/puppet apply --catalog /tmp/foocatalog", :stdout => result[:output], :stderr => result[:output])
        cmd.runcommand
-       File.unlink('/tmp/foocatalog','w')
        result[:exitcode] = cmd.status.exitstatus
        reply[:status] = result[:exitcode]
-       reply[:result] = result[:output]
+       reply[:bingo] = result[:output]
+#       File.unlink('/tmp/foocatalog','w')
       end
     end
   end

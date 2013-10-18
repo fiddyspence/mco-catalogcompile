@@ -8,13 +8,6 @@ metadata    :name        => "Puppet facts agent",
 
   action "getfacts", :description => "compile a catalog" do
     display :always
-    input :server,
-            :prompt      => "Which managed node we are getting facts for",
-            :description => "Which managed node we are getting facts for",
-            :type        => :string,
-            :validation  => '.',
-            :optional    => false,
-            :maxlength   => 255
 
         output :facts,
                :description => "The facts",
